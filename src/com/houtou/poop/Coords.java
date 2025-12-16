@@ -16,6 +16,6 @@ public class Coords {
     }
 
     public String toString() {
-        return description;
+        return String.format("(%d, %d): %s", x, y, description);
     }
 }

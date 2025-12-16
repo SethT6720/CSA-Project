@@ -1,9 +1,17 @@
 package com.houtou.poop;
 
+import java.util.Scanner;
+
 import com.houtou.poop.Item.Tool;
 import com.houtou.poop.Location.Location;
+import com.houtou.poop.Character.Player;
 
 public class Main {
+    public static void lookAround(Map map) {
+        System.out.println("You look around and see:");
+        System.out.println(map.toString());
+    }
+
     public static void main(String[] args) {
 
 
@@ -22,6 +30,43 @@ public class Main {
         Map map = new Map(3, 3);
         Location startingLocation = new Location(1, 1, "Starting Location", 2, 2);
         map.addLocation(1, 1, startingLocation);
-        System.out.print(map);
+
+        Scanner input = new Scanner(System.in);
+        System.out.println("Welcome to Houtou's Poop Adventure!");
+        System.out.print("Please enter your character's name: ");
+        String playerName = input.nextLine();
+        Player player = new Player(playerName, 10, 1, 1, "You");
+        System.out.println("Hello, " + player.getName() + "! Your adventure begins now.");
+        System.out.println("You are currently at: " + player.getPosition().toString());
+        System.out.println("Available Actions:\n\tmove [direction] - Move in a direction (north, south, east, west)\n\tlook - Look around your current location\n\tinventory - Check your inventory\n\tquit - Exit the game");
+        boolean playing = true;
+        while (playing) {
+            System.out.print("> ");
+            String command = input.nextLine().trim().toLowerCase();
+            switch (command) {
+                case "move":
+                    System.out.println("You move to a new location.");
+                    break;
+                case "look":
+                    lookAround(map);
+                    break;
+                case "inventory":
+                    System.out.println("Your inventory is empty.");
+                    break;
+                case "quit":
+                    System.out.println("Thanks for playing!");
+                    input.close();
+                    playing = false;
+                    break;
+                case "help":
+                    System.out.println("Available Actions:\n\tmove [direction] - Move in a direction (north, south, east, west)\n\tlook - Look around your current location\n\tinventory - Check your inventory\n\tquit - Exit the game");
+                    break;
+                default:
+                    System.out.println("Unknown command. Type help to see available commands.");
+                    break;
+            }
+        }
+
+        input.close();
     }
 }
