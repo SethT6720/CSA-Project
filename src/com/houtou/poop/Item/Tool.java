@@ -1,7 +1,5 @@
 package com.houtou.poop.Item;
 
-import javax.xml.namespace.QName;
-
 public class Tool extends Item {
 private int stat;
 

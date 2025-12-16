@@ -5,8 +5,6 @@ import com.houtou.poop.Item.Item;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.houtou.poop.Coords;
-
 public class Merchant extends Character {
     private List<Item> products;
 

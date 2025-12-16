@@ -2,6 +2,8 @@ package com.houtou.poop;
 
 import java.util.Arrays;
 
+import com.houtou.poop.Location.Location;
+
 public class Map {
     public Coords[][] map;
 
@@ -12,6 +14,10 @@ public class Map {
                 map[y][x] = new Coords(x, y, "Empty Tile", null);
             }
         }
+    }
+
+    public void addLocation(int x, int y, Location location) {
+        map[y][x] = location.position;
     }
 
     public String toString() {
