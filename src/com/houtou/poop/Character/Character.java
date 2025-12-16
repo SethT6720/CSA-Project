@@ -8,14 +8,37 @@ public class Character {
     private Coords position;
 
     public Character() {
-        this.name = "new character";
-        this.health = 10;
-        this.position = new Coords(0, 0);
+        this("new character", 10, 0, 0, "character location");
     }
 
-    public Character(String name, int health, int x, int y) {
+    public Character(String name, int health, int x, int y, String coordsDescription) {
         this.name = name;
         this.health = health;
-        this.position = new Coords(x, y);
+        this.position = new Coords(x, y, coordsDescription, this);
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public Coords getPosition() {
+        return position;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public void setPosition(Coords position) {
+        this.position = position;
+    }
+
 }

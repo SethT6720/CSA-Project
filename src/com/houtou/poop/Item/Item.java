@@ -9,6 +9,21 @@ public class Item {
     //type can be like weapon or armor or spell or whatever junk
     private String type;
 
+    public Item() {
+        this.name = "none";
+        this.value = 0;
+        this.description = "poopoo";
+        this.type = "item";
+    }
+
+    public Item(String name, int value, String description, String type){
+        this.name = name;
+        this.value = value;
+        this.description = description;
+        this.type = type;
+    }
+
+
 //getters
     public String getName() {
         return name;
