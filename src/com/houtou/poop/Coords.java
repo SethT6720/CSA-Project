@@ -15,6 +15,10 @@ public class Coords {
         this.thingHere = thingHere;
     }
 
+    public boolean isSomethingHere() {
+        return thingHere != null;
+    }
+
     public String toString() {
         return String.format("(%d, %d): %s", x, y, description);
     }

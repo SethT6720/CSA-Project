@@ -57,4 +57,8 @@ public class Item {
     public void setValue(int value) {
         this.value = value;
     }
+
+    public String toString() {
+        return this.getName() + ":\n" + "Type: " + this.getType() + "\nValue: " + this.getValue() + "\nDescription: " + this.getDescription();
+    }
 }
