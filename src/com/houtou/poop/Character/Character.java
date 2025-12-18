@@ -14,7 +14,7 @@ public class Character {
     public Character(String name, int health, int x, int y, String coordsDescription) {
         this.name = name;
         this.health = health;
-        this.position = new Coords(x, y, coordsDescription, this);
+        this.position = new Coords(x, y, coordsDescription, null);
     }
 
     public String getName() {
@@ -39,6 +39,15 @@ public class Character {
 
     public void setPosition(Coords position) {
         this.position = position;
+    }
+
+    public void takeDmg(int dmg, int defense) {
+        dmg -= defense;
+        if (dmg <= 0) {
+            dmg = 1;
+        }
+
+        this.health -= dmg;
     }
 
 }

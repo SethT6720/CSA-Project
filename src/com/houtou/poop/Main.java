@@ -3,6 +3,7 @@ package com.houtou.poop;
 import java.util.Scanner;
 
 import com.houtou.poop.Item.Tool;
+import com.houtou.poop.Location.EnterableLocation;
 import com.houtou.poop.Location.Location;
 import com.houtou.poop.Character.Player;
 
@@ -12,6 +13,10 @@ public class Main {
     public static void lookAround(Map map) {
         System.out.println("You look around and see:");
         System.out.println(map.toString());
+    }
+
+    public static void playerInventory() {
+
     }
 
     public static void move(String dir) throws IllegalArgumentException {
@@ -78,7 +83,7 @@ public class Main {
         Tool poo2 = new Tool("2nd poo", 100000000, "Poo from the creator so is kinda valuable", "accessory", 100000);
 
         Map map = new Map(3, 3);
-        Location startingLocation = new Location(1, 1, "The place where you woke up in this strange land");
+        Location startingLocation = new Location(1, 1, "Starting Tile", "The place where you woke up in this strange land");
         map.addLocation(1, 1, startingLocation);
 
         Scanner input = new Scanner(System.in);
@@ -112,11 +117,12 @@ public class Main {
                     lookAround(map);
                     break;
                 case "inspect":
-                    Coords currentPosition = player.getPosition();
-                    Coords currentLocation = player.currentMap.map[currentPosition.y][currentPosition.x];
+                    Coords playerPosition = player.getPosition();
+                    Coords currentCoords = player.currentMap.map[playerPosition.y][playerPosition.x];
 
-                    System.out.println(currentLocation.description);
-                    if (currentLocation.isSomethingHere()) {
+                    System.out.println(currentCoords);
+                    System.out.println(currentCoords.thingHere.getDescription());
+                    if (currentCoords.isTileEnterable()) {
                         System.out.println("This tile is enterable");
                     } else {
                         System.out.println("This tile is not enterable");
