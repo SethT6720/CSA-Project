@@ -37,21 +37,3 @@ public class Map {
         return height;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//k

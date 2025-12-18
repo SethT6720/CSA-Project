@@ -59,6 +59,6 @@ public class Item {
     }
 
     public String toString() {
-        return this.getName() + ":\n" + "Type: " + this.getType() + "\nValue: " + this.getValue() + "\nDescription: " + this.getDescription();
+        return this.getName() + ":\n\tType: " + this.getType() + "\n\tValue: " + this.getValue() + "\n\tDescription: " + this.getDescription();
     }
 }

@@ -13,7 +13,7 @@ public Tool(String name, int value, String description, String type, int stat){
         return stat;
     }
     public String toString() {
-        return this.getName() + ":\n" + "Type: " + this.getType() + "\nValue: " + this.getValue() + "\nStat: " + this.getStat() + "\nDescription: " + this.getDescription();
+        return this.getName() + ":\n\tType: " + this.getType() + "\n\tValue: " + this.getValue() + "\n\tStat: " + this.getStat() + "\n\tDescription: " + this.getDescription();
     }
 
     //setter

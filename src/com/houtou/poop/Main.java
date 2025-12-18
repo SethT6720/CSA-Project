@@ -16,7 +16,11 @@ public class Main {
     }
 
     public static void playerInventory() {
+        System.out.println(player.inventoryToString());
+    }
 
+    public static void playerEquips() {
+        System.out.println(player.checkEquips());
     }
 
     public static void move(String dir) throws IllegalArgumentException {
@@ -48,7 +52,7 @@ public class Main {
                 }
                 break;
             case "west":
-                if (currentPos.x < 0) {
+                if (currentPos.x > 0) {
                     currentPos.x--;
                     System.out.println(player);
                 } else {
@@ -82,9 +86,22 @@ public class Main {
         Tool mindlessCagedSwordHeartGodRealSoul = new Tool("Mindless Caged Sword Heart God Real Soul", 350, "Caged soul of the former soul heart god who conquered the 31 diferent human and demon realms uniting them under the 7 different elements to manifest her domain. The god killing sword appeared and she had to sacrifice her creation to contain it thus ruining her mind forever", "accessory", 36);
         Tool poo2 = new Tool("2nd poo", 100000000, "Poo from the creator so is kinda valuable", "accessory", 100000);
 
+
+        //MAPS
+
+
         Map map = new Map(3, 3);
         Location startingLocation = new Location(1, 1, "Starting Tile", "The place where you woke up in this strange land");
         map.addLocation(1, 1, startingLocation);
+
+        EnterableLocation bog = new EnterableLocation(2, 2, "THE BOG :o", "A moist land full of medium creatures, when expeditioners hear the name they shake with fear, only known as...THE BOG ;(", 2, 2);
+        map.addLocation(2, 2, bog);
+
+        EnterableLocation temperateShrublands = new EnterableLocation(1, 0, "THE TEMPERATE SHRUBLANDS", "Not too hot, not too cool, but just temperate...shurblands.", 3, 2);
+        map.addLocation(1, 0, temperateShrublands);
+
+        EnterableLocation village = new EnterableLocation(0,1, "Poop Village", "A village,built by poop, powered by poop", 2, 2);
+        map.addLocation(0, 1, village);
 
         Scanner input = new Scanner(System.in);
         System.out.println(godRendingDeathBlade);
@@ -93,6 +110,10 @@ public class Main {
         String playerName = input.nextLine();
         player = new Player(playerName, 10, 1, 1, "You");
         player.currentMap = map;
+        player.inventory.add(stick);
+        player.inventory.add(godRendingDeathBlade);
+        player.equipItem(stick);
+
         System.out.println("Hello, " + player.getName() + "! Your adventure begins now.");
         System.out.println("You are currently at: " + player.getPosition().toString());
         System.out.println("Type help for a list of commands");
@@ -129,7 +150,21 @@ public class Main {
                     }
                     break;
                 case "inventory":
-                    System.out.println("Your inventory is empty.");
+                    playerInventory();
+                    break;
+                case "checkequips":
+                    playerEquips();
+                    break;
+                case "equip":
+                    try {
+                        if (splitWords.length > 1) {
+
+                        } else {
+                            System.out.println("Please provide an item to equip");
+                        }
+                    } catch (IllegalArgumentException err) {
+
+                    }
                     break;
                 case "quit":
                     System.out.println("Thanks for playing!");

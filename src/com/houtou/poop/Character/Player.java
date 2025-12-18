@@ -24,31 +24,39 @@ public class Player extends Character {
         return getPosition().toString();
     }
 
+    public String inventoryToString() {
+        return inventory.toString().replace("[", "").replace("]", "").replace(", ", "\n\n");
+    }
+
+    public String checkEquips() {
+        return equippedItems.toString().replace("[", "").replace("]", "").replace(", ", "\n\n");
+    }
+
     public void unequipItem(String type) {
         switch (type) {
 
             case "weapon":
                 if(!isWeaponEquipped) {
-                    System.out.println("You dont have anything to unequip");
+                    System.out.println("You don't have anything to unequip");
                     return;
                 }
-
+                inventory.add(equippedItems.get(0));
                 equippedItems.remove(0);
                 break;
             case "armor":
                 if(!isArmorEquipped) {
-                    System.out.println("You dont have anything to unequip");
+                    System.out.println("You don't have anything to unequip");
                     return;
                 }
-
+                inventory.add(equippedItems.get(1));
                 equippedItems.remove(1);
                 break;
             case "accessory":
                 if(!isAccessoryEquipped) {
-                    System.out.println("You dont have anything to unequip");
+                    System.out.println("You don't have anything to unequip");
                     return;
                 }
-
+                inventory.add(equippedItems.get(1));
                 equippedItems.remove(2);
                 break;
             default:
@@ -57,17 +65,22 @@ public class Player extends Character {
     }
 
     public void equipItem(Item item) {
+
+        if (!inventory.contains(item)) {
+            return;
+        }
         switch(item.getType()) {
             case "weapon":
-                if(!isWeaponEquipped) {
+                if(isWeaponEquipped) {
                     System.out.println("You already have an item equipped in that slot");
                     return;
                 }
                 equippedItems.add(0, item);
+                System.out.println("weapon equipped");
                 isWeaponEquipped = true;
                 break;
             case "armor":
-                if(!isArmorEquipped) {
+                if(isArmorEquipped) {
                     System.out.println("You already have an item equipped in that slot");
                     return;
                 }
@@ -85,6 +98,7 @@ public class Player extends Character {
             default:
                 System.out.println("Invalid choice");
         }
+        inventory.remove(item);
     }
 
 }
