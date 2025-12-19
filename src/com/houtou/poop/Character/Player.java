@@ -42,6 +42,7 @@ public class Player extends Character {
                 }
                 inventory.add(equippedItems.get(0));
                 equippedItems.remove(0);
+                isWeaponEquipped = false;
                 break;
             case "armor":
                 if(!isArmorEquipped) {
@@ -50,6 +51,7 @@ public class Player extends Character {
                 }
                 inventory.add(equippedItems.get(1));
                 equippedItems.remove(1);
+                isArmorEquipped = false;
                 break;
             case "accessory":
                 if(!isAccessoryEquipped) {
@@ -58,6 +60,7 @@ public class Player extends Character {
                 }
                 inventory.add(equippedItems.get(1));
                 equippedItems.remove(2);
+                isAccessoryEquipped = false;
                 break;
             default:
                 System.out.println("Invalid choice");

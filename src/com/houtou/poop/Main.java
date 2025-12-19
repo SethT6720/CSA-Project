@@ -1,7 +1,10 @@
 package com.houtou.poop;
 
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Scanner;
 
+import com.houtou.poop.Item.Item;
 import com.houtou.poop.Item.Tool;
 import com.houtou.poop.Location.EnterableLocation;
 import com.houtou.poop.Location.Location;
@@ -9,6 +12,7 @@ import com.houtou.poop.Character.Player;
 
 public class Main {
     private static Player player;
+    private static Scanner input;
 
     public static void lookAround(Map map) {
         System.out.println("You look around and see:");
@@ -19,8 +23,55 @@ public class Main {
         System.out.println(player.inventoryToString());
     }
 
-    public static void playerEquips() {
+    public static void checkPlayerEquips() {
         System.out.println(player.checkEquips());
+    }
+
+    public static void equipPlayer(String equipType) throws IllegalArgumentException {
+        boolean validEquipType = (Objects.equals(equipType, "weapon") || Objects.equals(equipType, "armor") || Objects.equals(equipType, "accessory"));
+
+        if (validEquipType) {
+            boolean alreadyEquipped = player.equippedItems.stream().anyMatch(item -> Objects.equals(item.getType(), equipType));
+
+            if (!alreadyEquipped) {
+                Item[] allItemsOfType = player.inventory.stream().filter(tool -> Objects.equals(tool.getType(), equipType)).toArray(Item[]::new);
+                System.out.println("Which of the following " + equipType + "(s) would you like to equip?");
+                for (int i = 0; i < allItemsOfType.length; i++) {
+                    System.out.println("\t[" + (i + 1) + "] - " + allItemsOfType[i].getName());
+                }
+                System.out.print("Enter choice...\n> ");
+                int choice = input.nextInt();
+
+                while (choice < 1 || choice > allItemsOfType.length) {
+                    System.out.print("Entered choice was not one of the listed options. Please enter a valid selection...\n> ");
+                    choice = input.nextInt();
+                }
+                input.nextLine();
+
+                player.equipItem(allItemsOfType[choice - 1]);
+            } else {
+                System.out.println("Player already was a(n) " + equipType + " equipped. Would you like to unequip it an equip a new " + equipType + " instead? [y/n]");
+                System.out.print("> ");
+                String choice = input.nextLine().trim().toLowerCase();
+
+                while (!(Objects.equals(choice, "y") || Objects.equals(choice, "n"))) {
+                    System.out.println("Choice inputted was not a valid choice. Please input a valid choice [y/n]");
+                    System.out.print("> ");
+                    choice = input.nextLine().trim().toLowerCase();
+                }
+
+                switch (choice) {
+                    case "y":
+                        player.unequipItem(equipType);
+                        equipPlayer(equipType);
+                        break;
+                    case "n":
+                        break;
+                }
+            }
+        } else {
+            throw new IllegalArgumentException("Provided equip type was not a valid type. Please try again with a valid equip type (weapon, armor, accessory)");
+        }
     }
 
     public static void move(String dir) throws IllegalArgumentException {
@@ -103,7 +154,7 @@ public class Main {
         EnterableLocation village = new EnterableLocation(0,1, "Poop Village", "A village,built by poop, powered by poop", 2, 2);
         map.addLocation(0, 1, village);
 
-        Scanner input = new Scanner(System.in);
+        input = new Scanner(System.in);
         System.out.println(godRendingDeathBlade);
         System.out.println("Welcome to Houtou's Poop Adventure!");
         System.out.print("Please enter your character's name: ");
@@ -111,8 +162,17 @@ public class Main {
         player = new Player(playerName, 10, 1, 1, "You");
         player.currentMap = map;
         player.inventory.add(stick);
+        player.inventory.add(rustySword);
         player.inventory.add(godRendingDeathBlade);
-        player.equipItem(stick);
+
+        player.inventory.add(filthyRags);
+        player.inventory.add(poopCrustedArmor);
+        player.inventory.add(quintessentialGodArmor);
+
+        player.inventory.add(poo);
+        player.inventory.add(manaCrystalBrooch);
+        player.inventory.add(poo2);
+
 
         System.out.println("Hello, " + player.getName() + "! Your adventure begins now.");
         System.out.println("You are currently at: " + player.getPosition().toString());
@@ -152,18 +212,27 @@ public class Main {
                 case "inventory":
                     playerInventory();
                     break;
-                case "checkequips":
-                    playerEquips();
+                case "check-equips":
+                    checkPlayerEquips();
                     break;
                 case "equip":
                     try {
                         if (splitWords.length > 1) {
-
+                            equipPlayer(splitWords[1]);
                         } else {
                             System.out.println("Please provide an item to equip");
                         }
                     } catch (IllegalArgumentException err) {
-
+                        System.out.println(err.getMessage());
+                    }
+                    break;
+                case "unequip":
+                    String equipType = splitWords[1];
+                    boolean validEquipType = (Objects.equals(equipType, "weapon") || Objects.equals(equipType, "armor") || Objects.equals(equipType, "accessory"));
+                    if (validEquipType) {
+                        player.unequipItem(equipType);
+                    } else {
+                        System.out.println("Tool type inputted was not a valid type. Please provide a valid type (weapon, armor, accessory).");
                     }
                     break;
                 case "quit":
@@ -175,7 +244,7 @@ public class Main {
                     System.out.println("You are currently at: " + player.getPosition());
                     break;
                 case "help":
-                    System.out.println("Available Actions:\n\tmove [direction] - Move in a direction (north, south, east, west)\n\tlook - Look around and create a map of your surroundings\n\tinspect - Inspects the your current tile\n\tinteract - Interacts with whatever is at your current tile\n\twhereami - Find your current Coordinates\n\tinventory - Check your inventory\n\tquit - Exit the game\n\thelp - Shows this screen");
+                    System.out.println("Available Actions:\n\tmove [direction] - Move in a direction (north, south, east, west)\n\tlook - Look around and create a map of your surroundings\n\tinspect - Inspects the your current tile\n\tinteract - Interacts with whatever is at your current tile\n\twhereami - Find your current Coordinates\n\tinventory - Check your inventory\n\tequip [item-type] - Equips an item to the corresponding slot (weapon, armor, accessory)\n\tunequip [item-type] - Unequips the item at the corresponding slot (weapon, armor, accessory)\n\tcheck-equips - Prints a list of your currently equipped items\n\tquit - Exit the game\n\thelp - Shows this screen");
                     break;
                 default:
                     System.out.println("Unknown command. Type help to see available commands.");
@@ -186,3 +255,14 @@ public class Main {
         input.close();
     }
 }
+
+
+/*
+Equip and unequip is mostly working
+Nate you need to fix equip so that you can equip armor/accessory without needing a weapon equipped. Problem with indexes and accessing ones without something in the previous one
+Potentially also a problem with the list mixing up weapon and armor slots after unequipping a weapon with armor still equipped
+my recommendation would prob be to populate the list with three null values, then just replace those when equipping things
+and replacing the item with null when unequipping things
+
+I think the only thing really left to do is to work on combat
+ */
