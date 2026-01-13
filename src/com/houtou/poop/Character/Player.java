@@ -1,23 +1,40 @@
 package com.houtou.poop.Character;
 
 import com.houtou.poop.Item.Item;
+import com.houtou.poop.Item.Tool;
 import com.houtou.poop.Map;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player extends Character {
-    public List<Item> inventory = new ArrayList<Item>();
-    public List<Item> equippedItems = new ArrayList<Item>();
+public class Player extends Fighter {
+    public List<Tool> inventory = new ArrayList<Tool>();
+    public List<Tool> equippedItems = new ArrayList<Tool>();
     public Map currentMap;
     private int gold;
     private boolean isWeaponEquipped = false;
     private boolean isArmorEquipped = false;
     private boolean isAccessoryEquipped = false;
 
-    public Player(String name, int health, int x, int y, String coordsDescription) {
-        super(name, health, x, y, coordsDescription);
+    public Player(String name, int health, int x, int y, String coordsDescription, int strength, int defense) {
+        super(name, health, x, y, coordsDescription, strength, defense);
         this.gold = 0;
+    }
+
+    public int getStrength() {
+        if (isWeaponEquipped) {
+            int modifier = equippedItems.getFirst().getStat();
+            return super.getStrength() + modifier;
+        }
+        return super.getStrength();
+    }
+
+    public int getDefense() {
+        if (isArmorEquipped) {
+            int modifier = equippedItems.get(1).getStat();
+            return super.getDefense() + modifier;
+        }
+        return super.getDefense();
     }
 
     public String toString() {
@@ -42,6 +59,7 @@ public class Player extends Character {
                 }
                 inventory.add(equippedItems.get(0));
                 equippedItems.remove(0);
+                equippedItems.add(0, null);
                 isWeaponEquipped = false;
                 break;
             case "armor":
@@ -51,6 +69,7 @@ public class Player extends Character {
                 }
                 inventory.add(equippedItems.get(1));
                 equippedItems.remove(1);
+                equippedItems.add(1, null);
                 isArmorEquipped = false;
                 break;
             case "accessory":
@@ -60,6 +79,7 @@ public class Player extends Character {
                 }
                 inventory.add(equippedItems.get(1));
                 equippedItems.remove(2);
+                equippedItems.add(2, null);
                 isAccessoryEquipped = false;
                 break;
             default:
@@ -67,7 +87,7 @@ public class Player extends Character {
         }
     }
 
-    public void equipItem(Item item) {
+    public void equipItem(Tool item) {
 
         if (!inventory.contains(item)) {
             return;
@@ -78,6 +98,7 @@ public class Player extends Character {
                     System.out.println("You already have an item equipped in that slot");
                     return;
                 }
+                equippedItems.remove(0);
                 equippedItems.add(0, item);
                 System.out.println("weapon equipped");
                 isWeaponEquipped = true;
@@ -87,6 +108,7 @@ public class Player extends Character {
                     System.out.println("You already have an item equipped in that slot");
                     return;
                 }
+                equippedItems.remove(1);
                 equippedItems.add(1, item);
                 isArmorEquipped = true;
                 break;
@@ -95,6 +117,7 @@ public class Player extends Character {
                     System.out.println("You already have an item equipped in that slot");
                     return;
                 }
+                equippedItems.remove(2);
                 equippedItems.add(2, item);
                 isAccessoryEquipped = true;
                 break;

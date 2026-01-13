@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
 
+import com.houtou.poop.Character.Enemy;
 import com.houtou.poop.Item.Item;
 import com.houtou.poop.Item.Tool;
 import com.houtou.poop.Location.EnterableLocation;
@@ -34,7 +35,7 @@ public class Main {
             boolean alreadyEquipped = player.equippedItems.stream().anyMatch(item -> Objects.equals(item.getType(), equipType));
 
             if (!alreadyEquipped) {
-                Item[] allItemsOfType = player.inventory.stream().filter(tool -> Objects.equals(tool.getType(), equipType)).toArray(Item[]::new);
+                Tool[] allItemsOfType = player.inventory.stream().filter(tool -> Objects.equals(tool.getType(), equipType)).toArray(Tool[]::new);
                 System.out.println("Which of the following " + equipType + "(s) would you like to equip?");
                 for (int i = 0; i < allItemsOfType.length; i++) {
                     System.out.println("\t[" + (i + 1) + "] - " + allItemsOfType[i].getName());
@@ -115,6 +116,38 @@ public class Main {
         }
     }
 
+    public static void fight(Enemy enemy) {
+        System.out.println("An " + enemy.getName() + " appears!");
+        boolean inCombat = true;
+        int enemyhp = enemy.getHealth();
+        int enemydef = enemy.getDefense();
+        int enemystr = enemy.getStrength();
+
+        int playerhp = player.getHealth();
+        int playerdef = player.getDefense();
+        int playerstr = player.getStrength();
+
+        while (inCombat) {
+            System.out.printf("HP: %s\t Def: %s\nStr: %s\n", enemy.getHealth(), enemy.getDefense(), enemy.getStrength());
+            System.out.printf("\nYour Stats:\nHP: %s\tDef: %s\nStr: %s\n", player.getHealth(), player.getDefense(), player.getStrength());
+
+            System.out.println("What would you like to do?\n[1] - Attack\nEnter Choice: ");
+            int selectedInput = input.nextInt();
+            input.nextLine();
+            if (selectedInput != 1) {
+                System.out.print("You inputted [1] - attack, Correct?\nY/N\nEnter choice: ");
+                input.nextLine();
+                System.out.println("Perfect, thank you for choosing to attack of your own free will :)");
+            }
+
+            enemyhp -= playerstr - enemydef;
+            if (enemyhp <= 0) {
+
+            }
+        }
+
+    }
+
     public static void main(String[] args) {
 
 
@@ -154,12 +187,27 @@ public class Main {
         EnterableLocation village = new EnterableLocation(0,1, "Poop Village", "A village,built by poop, powered by poop", 2, 2);
         map.addLocation(0, 1, village);
 
+        EnterableLocation pizzaria = new EnterableLocation(0,2, "Abandoned pizzaria", "An old abandoned pizzaria full of animal like robotics, you can tell a purple man used to reside in the hallways.", 2, 2);
+        map.addLocation(0, 2, pizzaria);
+
+        EnterableLocation space = new EnterableLocation(0,0, "Outer space", "An endless (almost its still 2x2) void", 2, 2);
+        map.addLocation(0, 0, space);
+
+        EnterableLocation venezuela = new EnterableLocation(2,1, "Venezuela", "weird politics but still an awesome country", 2, 2);
+        map.addLocation(2, 1, venezuela);
+
+        EnterableLocation gourmetWorld = new EnterableLocation(2,0, "Gourmet World", "A world made from the gourmet cells that landed on the planet 3 billion years ago boasting numerous gourmet ingredients.", 2, 2);
+        map.addLocation(2, 0, gourmetWorld);
+
+        EnterableLocation center = new EnterableLocation(1,2, "Venezuela 2 (the center of the earth)", "Area zero for the meteorite that brought gourmet cells to the world. Every ingredient comes from the pure 100% diary free gourmet cells found here.", 2, 2);
+        map.addLocation(1, 2, center);
+
         input = new Scanner(System.in);
         System.out.println(godRendingDeathBlade);
         System.out.println("Welcome to Houtou's Poop Adventure!");
         System.out.print("Please enter your character's name: ");
         String playerName = input.nextLine();
-        player = new Player(playerName, 10, 1, 1, "You");
+        player = new Player(playerName, 10, 1, 1, "You", 1, 1);
         player.currentMap = map;
         player.inventory.add(stick);
         player.inventory.add(rustySword);
@@ -231,6 +279,7 @@ public class Main {
                     boolean validEquipType = (Objects.equals(equipType, "weapon") || Objects.equals(equipType, "armor") || Objects.equals(equipType, "accessory"));
                     if (validEquipType) {
                         player.unequipItem(equipType);
+                        System.out.println(equipType + " unequipped");
                     } else {
                         System.out.println("Tool type inputted was not a valid type. Please provide a valid type (weapon, armor, accessory).");
                     }
@@ -242,6 +291,9 @@ public class Main {
                     break;
                 case "whereami":
                     System.out.println("You are currently at: " + player.getPosition());
+                    break;
+                case "fight":
+                    fight(new Enemy("ene", 10, 0, 0, "blank", 1, 1));
                     break;
                 case "help":
                     System.out.println("Available Actions:\n\tmove [direction] - Move in a direction (north, south, east, west)\n\tlook - Look around and create a map of your surroundings\n\tinspect - Inspects the your current tile\n\tinteract - Interacts with whatever is at your current tile\n\twhereami - Find your current Coordinates\n\tinventory - Check your inventory\n\tequip [item-type] - Equips an item to the corresponding slot (weapon, armor, accessory)\n\tunequip [item-type] - Unequips the item at the corresponding slot (weapon, armor, accessory)\n\tcheck-equips - Prints a list of your currently equipped items\n\tquit - Exit the game\n\thelp - Shows this screen");
