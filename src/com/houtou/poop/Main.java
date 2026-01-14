@@ -1,5 +1,6 @@
 package com.houtou.poop;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
@@ -14,6 +15,7 @@ import com.houtou.poop.Character.Player;
 public class Main {
     private static Player player;
     private static Scanner input;
+    private static ArrayList<Tool> itemPool = new ArrayList<Tool>();
 
     public static void lookAround(Map map) {
         System.out.println("You look around and see:");
@@ -119,19 +121,22 @@ public class Main {
     public static void fight(Enemy enemy) {
         System.out.println("An " + enemy.getName() + " appears!");
         boolean inCombat = true;
-        int enemyhp = enemy.getHealth();
-        int enemydef = enemy.getDefense();
-        int enemystr = enemy.getStrength();
+        boolean playerWon = false;
 
-        int playerhp = player.getHealth();
-        int playerdef = player.getDefense();
-        int playerstr = player.getStrength();
 
         while (inCombat) {
-            System.out.printf("HP: %s\t Def: %s\nStr: %s\n", enemy.getHealth(), enemy.getDefense(), enemy.getStrength());
+            int enemyhp = enemy.getHealth();
+            int enemydef = enemy.getDefense();
+            int enemystr = enemy.getStrength();
+
+            int playerhp = player.getHealth();
+            int playerdef = player.getDefense();
+            int playerstr = player.getStrength();
+
+            System.out.printf("Enemy Stats:\nHP: %s\t Def: %s\nStr: %s\n", enemy.getHealth(), enemy.getDefense(), enemy.getStrength());
             System.out.printf("\nYour Stats:\nHP: %s\tDef: %s\nStr: %s\n", player.getHealth(), player.getDefense(), player.getStrength());
 
-            System.out.println("What would you like to do?\n[1] - Attack\nEnter Choice: ");
+            System.out.print("What would you like to do?\n[1] - Attack\nEnter Choice: ");
             int selectedInput = input.nextInt();
             input.nextLine();
             if (selectedInput != 1) {
@@ -140,11 +145,58 @@ public class Main {
                 System.out.println("Perfect, thank you for choosing to attack of your own free will :)");
             }
 
-            enemyhp -= playerstr - enemydef;
-            if (enemyhp <= 0) {
+            if (playerstr > enemydef) {
+                enemy.setHealth(enemyhp - (playerstr - enemydef));
+            } else {
+                enemy.setHealth(enemyhp - 1);
+            }
 
+
+
+            if (enemyhp <= 0) {
+                playerWon = true;
+                inCombat = false;
+                break;
+            } else {
+                if (enemystr > playerdef) {
+                    player.setHealth(playerhp - (enemystr - playerdef));
+                } else {
+                    player.setHealth(playerhp - 1);
+                }
+            }
+
+            if (playerhp <= 0) {
+                inCombat = false;
+                break;
             }
         }
+
+        if (!playerWon) {
+            System.out.println("You died...");
+            input.close();
+            System.exit(0);
+        } else {
+            System.out.println("Congratulations, you won!!");
+            System.out.println("You received: ");
+            int goldWon = (int) Math.floor(enemy.getMaxHealth() * (Math.random() * 2 + 0.1));
+            player.setGold(player.getGold() + goldWon);
+            System.out.println(goldWon + " gold");
+
+            boolean itemDropped = Math.random() < 0.1;
+            if (itemDropped) {
+                int itemIndex = (int) Math.floor(itemPool.size() * Math.random());
+                Tool item = itemPool.get(itemIndex);
+                String itemName = item.getName();
+                String itemType = item.getType();
+                player.inventory.add(item);
+                itemPool.remove(itemIndex);
+                System.out.printf("A(n) %s named %s\n", itemType, itemName);
+            }
+
+        }
+    }
+
+    public static void inspect(int enemyScaler) {
 
     }
 
@@ -170,7 +222,23 @@ public class Main {
         Tool mindlessCagedSwordHeartGodRealSoul = new Tool("Mindless Caged Sword Heart God Real Soul", 350, "Caged soul of the former soul heart god who conquered the 31 diferent human and demon realms uniting them under the 7 different elements to manifest her domain. The god killing sword appeared and she had to sacrifice her creation to contain it thus ruining her mind forever", "accessory", 36);
         Tool poo2 = new Tool("2nd poo", 100000000, "Poo from the creator so is kinda valuable", "accessory", 100000);
 
+        itemPool.add(stick);
+        itemPool.add(rustySword);
+        itemPool.add(ugandanClub);
+        itemPool.add(godRendingDeathBlade);
+        itemPool.add(chineseNuke);
 
+        itemPool.add(filthyRags);
+        itemPool.add(poopCrustedArmor);
+        itemPool.add(nineYangGodLeafRobe);
+        itemPool.add(tenThousandGolemHeavenlySteelMindConstruct);
+        itemPool.add(quintessentialGodArmor);
+
+        itemPool.add(poo);
+        itemPool.add(memoryLocket);
+        itemPool.add(manaCrystalBrooch);
+        itemPool.add(mindlessCagedSwordHeartGodRealSoul);
+        itemPool.add(poo2);
         //MAPS
 
 

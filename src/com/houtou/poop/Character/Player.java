@@ -29,6 +29,14 @@ public class Player extends Fighter {
         return super.getStrength();
     }
 
+    public void setGold(int newGold) {
+        gold = newGold;
+    }
+
+    public int getGold() {
+        return gold;
+    }
+
     public int getDefense() {
         if (isArmorEquipped) {
             int modifier = equippedItems.get(1).getStat();
