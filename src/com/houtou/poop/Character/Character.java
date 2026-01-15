@@ -47,13 +47,4 @@ public class Character {
         this.position = position;
     }
 
-    public void takeDmg(int dmg, int defense) {
-        dmg -= defense;
-        if (dmg <= 0) {
-            dmg = 1;
-        }
-
-        this.health -= dmg;
-    }
-
 }

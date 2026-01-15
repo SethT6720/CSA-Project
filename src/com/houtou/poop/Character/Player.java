@@ -19,6 +19,9 @@ public class Player extends Fighter {
     public Player(String name, int health, int x, int y, String coordsDescription, int strength, int defense) {
         super(name, health, x, y, coordsDescription, strength, defense);
         this.gold = 0;
+        equippedItems.add(0, null);
+        equippedItems.add(0, null);
+        equippedItems.add(0, null);
     }
 
     public int getStrength() {
@@ -27,6 +30,14 @@ public class Player extends Fighter {
             return super.getStrength() + modifier;
         }
         return super.getStrength();
+    }
+
+    public int getMaxHealth() {
+        if (isAccessoryEquipped) {
+            int modifier = equippedItems.get(2).getStat();
+            return super.getMaxHealth() + modifier;
+        }
+        return super.getMaxHealth();
     }
 
     public void setGold(int newGold) {
