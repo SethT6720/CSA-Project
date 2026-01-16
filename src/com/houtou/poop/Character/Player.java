@@ -1,6 +1,5 @@
 package com.houtou.poop.Character;
 
-import com.houtou.poop.Item.Item;
 import com.houtou.poop.Item.Tool;
 import com.houtou.poop.Map;
 
@@ -8,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Fighter {
-    public List<Tool> inventory = new ArrayList<Tool>();
-    public List<Tool> equippedItems = new ArrayList<Tool>();
+    public List<Tool> inventory = new ArrayList<>();
+    public List<Tool> equippedItems = new ArrayList<>();
     public Map currentMap;
     private int gold;
     private boolean isWeaponEquipped = false;
@@ -19,9 +18,9 @@ public class Player extends Fighter {
     public Player(String name, int health, int x, int y, String coordsDescription, int strength, int defense) {
         super(name, health, x, y, coordsDescription, strength, defense);
         this.gold = 0;
-        equippedItems.add(0, null);
-        equippedItems.add(0, null);
-        equippedItems.add(0, null);
+        equippedItems.addFirst(null);
+        equippedItems.addFirst(null);
+        equippedItems.addFirst(null);
     }
 
     public int getStrength() {
@@ -76,9 +75,9 @@ public class Player extends Fighter {
                     System.out.println("You don't have anything to unequip");
                     return;
                 }
-                inventory.add(equippedItems.get(0));
-                equippedItems.remove(0);
-                equippedItems.add(0, null);
+                inventory.add(equippedItems.getFirst());
+                equippedItems.removeFirst();
+                equippedItems.addFirst(null);
                 isWeaponEquipped = false;
                 break;
             case "armor":
@@ -117,8 +116,8 @@ public class Player extends Fighter {
                     System.out.println("You already have an item equipped in that slot");
                     return;
                 }
-                equippedItems.remove(0);
-                equippedItems.add(0, item);
+                equippedItems.removeFirst();
+                equippedItems.addFirst(item);
                 System.out.println("weapon equipped");
                 isWeaponEquipped = true;
                 break;
@@ -129,6 +128,7 @@ public class Player extends Fighter {
                 }
                 equippedItems.remove(1);
                 equippedItems.add(1, item);
+                System.out.println("armor equipped");
                 isArmorEquipped = true;
                 break;
             case "accessory":
@@ -138,6 +138,7 @@ public class Player extends Fighter {
                 }
                 equippedItems.remove(2);
                 equippedItems.add(2, item);
+                System.out.println("accessory equipped");
                 isAccessoryEquipped = true;
                 break;
             default:
